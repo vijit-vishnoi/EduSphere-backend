@@ -1,11 +1,13 @@
-import express from 'express';
+const express=require('express');
 const bodyParser=require('body-parser');
-
+const {PORT} = require ('../src/config/serverConfig');
 const app=express();
 
-app.use('/api',apiRoutes);
+app.use(express.json());
+
+const authRoutes=require('./routes');
+app.use('/api/v1',authRoutes);
 
 app.listen(PORT,async()=>{
     console.log(`Server started on Port: ${PORT}`);
-    
 })
