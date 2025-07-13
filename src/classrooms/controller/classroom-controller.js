@@ -1,6 +1,6 @@
 const ClassroomService = require('../services/classroom-service');
-const classroomService = new ClassroomService(); 
-const { User,Classroom } = require('../../models');
+const classroomService = new ClassroomService();
+const { User, Classroom } = require('../../models');
 
 const createClassroom = async (req, res) => {
   try {
@@ -18,6 +18,7 @@ const createClassroom = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 const joinClassroom = async (req, res) => {
   try {
     const { code } = req.body;
@@ -33,6 +34,7 @@ const joinClassroom = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
 const getMyClassrooms = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -43,34 +45,32 @@ const getMyClassrooms = async (req, res) => {
     if (role === 'teacher') {
       classrooms = await Classroom.findAll({
         where: { teacherId: userId },
-        order: [['createdAt', 'DESC']]
+        order: [['createdAt', 'DESC']],
       });
-
     } else if (role === 'student') {
       const student = await User.findByPk(userId, {
-      include: {
-        model: Classroom,
-        as: 'joinedClassrooms',
-        through: { attributes: [] },
         include: {
-          model: User,
-          as: 'teacher',
-          attributes: ['name']
-        }
-      }
-    });
-
+          model: Classroom,
+          as: 'joinedClassrooms',
+          through: { attributes: [] },
+          include: {
+            model: User,
+            as: 'classTeacher', // ✅ Correct alias
+            attributes: ['id', 'name'],
+          },
+        },
+      });
 
       classrooms = student?.joinedClassrooms || [];
     }
 
     res.status(200).json({ classrooms });
-
   } catch (error) {
     console.error('Error fetching classrooms:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 const getClassroomById = async (req, res) => {
   try {
     const classroomId = req.params.id;
@@ -81,21 +81,22 @@ const getClassroomById = async (req, res) => {
       include: [
         {
           model: User,
-          as: 'teacher',
-          attributes: ['name'],
+          as: 'classTeacher', // ✅ Correct alias
+          attributes: ['id', 'name'],
         },
         role === 'teacher' && {
           model: User,
           as: 'students',
           attributes: ['id', 'name'],
-          through: { attributes: [] }
-        }
-      ].filter(Boolean)
+          through: { attributes: [] },
+        },
+      ].filter(Boolean),
     });
 
     if (!classroom) {
       return res.status(404).json({ error: 'Classroom not found' });
     }
+
     if (role === 'student') {
       const joined = await classroom.hasStudent(userId);
       if (!joined) {
@@ -108,6 +109,7 @@ const getClassroomById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 const removeStudentFromClassroom = async (req, res) => {
   try {
     const classroomId = req.params.id;
@@ -120,7 +122,7 @@ const removeStudentFromClassroom = async (req, res) => {
     }
 
     const classroom = await Classroom.findOne({
-      where: { id: classroomId, teacherId }
+      where: { id: classroomId, teacherId },
     });
 
     if (!classroom) {
@@ -154,14 +156,11 @@ const leaveClassroom = async (req, res) => {
   }
 };
 
-
-
-
 module.exports = {
   createClassroom,
   joinClassroom,
   getMyClassrooms,
   getClassroomById,
   removeStudentFromClassroom,
-  leaveClassroom
+  leaveClassroom,
 };

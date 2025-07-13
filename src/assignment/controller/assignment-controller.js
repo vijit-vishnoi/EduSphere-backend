@@ -60,7 +60,7 @@ const getAssignmentsByClassroom = async (req, res) => {
 
       const classroomIds = studentClassrooms.map(sc => sc.classroomId);
 
-      // ✅ Handle case when student has left all classrooms
+      
       if (classroomIds.length === 0) {
         return res.status(403).json({ message: 'You have not joined any classroom yet' });
       }

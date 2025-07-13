@@ -1,21 +1,51 @@
+'use strict';
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-  const Submission = sequelize.define('Submission', {
-    content: DataTypes.TEXT, 
-    grade: DataTypes.STRING,
-    studentId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+  class Submission extends Model {
+    static associate(models) {
+      Submission.belongsTo(models.Assignment, {
+        foreignKey: 'assignmentId',
+        as: 'assignment'
+      });
+
+      Submission.belongsTo(models.User, {
+        foreignKey: 'studentId',
+        as: 'student'
+      });
+    }
+  }
+
+  Submission.init({
     assignmentId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
+    studentId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    submittedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    grade: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    feedback: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    }
+  }, {
+    sequelize,
+    modelName: 'Submission',
   });
-
-  Submission.associate = (models) => {
-    Submission.belongsTo(models.User, { foreignKey: 'studentId', as: 'student' });
-    Submission.belongsTo(models.Assignment, { foreignKey: 'assignmentId' });
-  };
 
   return Submission;
 };
