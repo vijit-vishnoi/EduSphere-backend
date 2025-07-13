@@ -36,13 +36,13 @@ const getMySubmission = async (req, res) => {
 const getAllSubmissionsForAssignment = async (req, res) => {
   try {
     const { assignmentId } = req.params;
-    const user = req.user;
+    const teacherId = req.user.id;
 
-    if (user.role !== 'teacher') {
+    if (req.user.role !== 'teacher') {
       return res.status(403).json({ error: 'Only teachers can view all submissions' });
     }
 
-    const submissions = await submissionService.getSubmissionsForAssignment(assignmentId);
+    const submissions = await submissionService.getSubmissionsForAssignment(assignmentId, teacherId);
     res.status(200).json(submissions);
   } catch (err) {
     console.error('Error fetching submissions:', err);
@@ -50,8 +50,31 @@ const getAllSubmissionsForAssignment = async (req, res) => {
   }
 };
 
+
+const gradeSubmission = async (req, res) => {
+  try {
+
+    const teacherId = req.user.id;
+    const { submissionId } = req.params;
+    const { grade, feedback } = req.body;
+
+    const updated = await submissionService.gradeSubmission({
+      submissionId,
+      teacherId,
+      grade,
+      feedback,
+    });
+
+    return res.status(200).json({ message: 'Submission graded', updated });
+  } catch (err) {
+    return res.status(403).json({ error: err.message });
+  }
+};
+
+
 module.exports = {
   createSubmission,
   getMySubmission,
-  getAllSubmissionsForAssignment
+  getAllSubmissionsForAssignment,
+  gradeSubmission
 };

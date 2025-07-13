@@ -29,6 +29,13 @@ class SubmissionRepository {
       order: [['submittedAt', 'DESC']]
     });
   }
+  async findById(id) {
+  return await Submission.findByPk(id);
+}
+async updateGrade(id, data) {
+    return await Submission.update(data, { where: { id } });
+  }
+
 }
 
 module.exports = SubmissionRepository;
