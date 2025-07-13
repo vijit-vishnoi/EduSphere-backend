@@ -16,6 +16,19 @@ class ClassroomRepository {
   async addStudentToClassroom(classroomId, studentId) {
     return await ClassroomStudent.create({ classroomId, studentId });
   }
+  async removeStudentFromClassroom(classroomId, studentId) {
+    return await ClassroomStudent.destroy({
+      where: {
+        classroomId,
+        studentId,
+      },
+    });
+  }
+  async findById(id) {
+  const classroom = await Classroom.findByPk(id);
+  return classroom;
+}
+
   async findAllByTeacherId(teacherId) {
   return await Classroom.findAll({
     where: { teacherId },

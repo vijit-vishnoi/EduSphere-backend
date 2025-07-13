@@ -10,6 +10,7 @@ class ClassroomService {
     const code = (await nanoid())(6);
     return await this.classroomRepository.create({ name, subject, code, teacherId });
   }
+
   async joinClassroom({ studentId, code }) {
   const classroom = await this.classroomRepository.findByCode(code);
   if (!classroom) throw new Error('Invalid classroom code');
@@ -23,7 +24,20 @@ class ClassroomService {
   await this.classroomRepository.addStudentToClassroom(classroom.id, studentId);
   return classroom;
   }
-  
+  async leaveClassroom({ classroomId, studentId }) {
+  const classroom = await this.classroomRepository.findById(classroomId);
+  if (!classroom) throw new Error('Classroom not found');
+
+  const removed = await this.classroomRepository.removeStudentFromClassroom(
+    classroomId,
+    studentId
+  );
+
+  if (!removed) throw new Error('You are not enrolled in this classroom');
+
+  return { message: 'Left classroom successfully' };
+}
+
   async getMyClassrooms({ userId, role }) {
   if (role === 'teacher') {
     return await this.classroomRepository.findAllByTeacherId(userId);
