@@ -1,5 +1,7 @@
 const SubmissionRepository = require('../repository/submission-repository');
 const { Assignment } = require('../../models');
+const { Submission } = require('../../models');
+
 
 class SubmissionService {
   constructor() {
@@ -26,9 +28,19 @@ class SubmissionService {
     return submission;
   }
    async getMySubmission({ assignmentId, studentId }) {
-    return await this.submissionRepository.findByAssignmentAndStudent(assignmentId, studentId);
-  }
+  const submission = await Submission.findOne({
+    where: {
+      assignmentId,
+      studentId,
+    },
+    attributes: ['id', 'content', 'grade', 'feedback', 'createdAt'],
+  });
+
+  return submission;
+}
+
   async getSubmissionsForAssignment(assignmentId, teacherId) {
+    
   const assignment = await Assignment.findByPk(assignmentId);
   if (!assignment) throw new Error('Assignment not found');
 

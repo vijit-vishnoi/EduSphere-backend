@@ -6,9 +6,9 @@ const { getMySubmission,gradeSubmission } = require('../submission/controller/su
 
 
 router.post('/', protect, authorizeRoles('student'), controller.createSubmission);
-router.get('/:assignmentId', protect, authorizeRoles('student'), getMySubmission);
+router.get('/:assignmentId/mine', protect, authorizeRoles('student'), getMySubmission);
 router.get('/:assignmentId/all', protect, controller.getAllSubmissionsForAssignment); 
-router.post('/:submissionId/grade', protect, authorizeRoles('teacher'),gradeSubmission);
+router.patch('/:submissionId/grade', protect, authorizeRoles('teacher'),gradeSubmission);
 
 
 module.exports = router;

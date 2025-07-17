@@ -29,7 +29,9 @@ class UserService {
 
   async login({ email, password }) {
     const user = await this.userRepository.findByEmail(email);
-    if (!user) throw new Error('Invalid credentials');
+    if (!user) throw new Error('User not found');
+    console.log('Plain password:', password);
+console.log('Stored hash from DB:', user.password);
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new Error('Invalid credentials');

@@ -56,13 +56,16 @@ const gradeSubmission = async (req, res) => {
 
     const teacherId = req.user.id;
     const { submissionId } = req.params;
-    const { grade, feedback } = req.body;
-
+    const { grade, feedback,assignmentId} = req.body;
+    if (req.user.role !== 'teacher') {
+      return res.status(403).json({ error: 'Only teachers can grade submissions' });
+    }
     const updated = await submissionService.gradeSubmission({
       submissionId,
       teacherId,
       grade,
       feedback,
+      assignmentId,
     });
 
     return res.status(200).json({ message: 'Submission graded', updated });

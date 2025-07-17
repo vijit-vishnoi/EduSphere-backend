@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
     Assignment.belongsTo(models.User, { foreignKey: 'teacherId', as: 'teacher' });
     Assignment.belongsTo(models.Classroom, { foreignKey: 'classroomId' });
     Assignment.hasMany(models.Submission, { foreignKey: 'assignmentId' });
+    Assignment.hasMany(models.Comment, {
+    foreignKey: 'assignmentId',
+    as: 'comments'
+  });
   };
 
   return Assignment;
