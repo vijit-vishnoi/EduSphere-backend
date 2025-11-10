@@ -33,10 +33,16 @@ export default function SignupPage({ onSignup, onNavigateToLogin }: SignupPagePr
   ];
 
   const handleSubmit = async(e: React.FormEvent) => {
-    e.preventDefault();
+    if (e)e.preventDefault();
+    console.log("SUBMIT CALLED! formData:", formData); 
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+    alert("Please fill out all required fields.");
+    return;
+  }
     try {
     const res = await register(formData);
-    // assuming backend returns { role: 'student' | 'teacher' }
+    console.log("🚀 Signup request sent to backend with:", formData);
+
     onSignup(res.data.role);
   } catch (err: any) {
     console.error(err);
@@ -127,13 +133,10 @@ export default function SignupPage({ onSignup, onNavigateToLogin }: SignupPagePr
           </CardHeader>
           
           <CardContent className="space-y-6">
-            <form
-              onSubmit={(e) => {
-                if (currentStep === steps.length-1 ) {
-                  handleSubmit(e); // Only submit on last step
-                } else {
-                  e.preventDefault(); // Prevent submission for intermediate steps
-                }
+            <div
+              onKeyDown={(e) => {
+                // Prevent Enter key from triggering any accidental submit
+                if (e.key === "Enter") e.preventDefault();
               }}
               className="space-y-4"
             >
@@ -307,6 +310,7 @@ export default function SignupPage({ onSignup, onNavigateToLogin }: SignupPagePr
                   ) : (
                     <Button
                       type="submit"
+                      onClick={handleSubmit}
                       className="bg-gradient-to-r from-[var(--neon-green)] to-[var(--neon-blue)] hover:glow-green border-0 text-background"
                     >
                       Create Account
@@ -314,7 +318,7 @@ export default function SignupPage({ onSignup, onNavigateToLogin }: SignupPagePr
                   )}
                 </motion.div>
               </div>
-            </form>
+            </div>
 
             <div className="text-center space-y-2">
               <p className="text-sm text-muted-foreground">Already have an account?</p>

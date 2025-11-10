@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs');
 const ALLOWED_ROLES = ['student', 'teacher'];
 const jwt = require('jsonwebtoken');
 const UserRepository = require('../repository/user-repository');
@@ -12,21 +11,23 @@ class UserService {
     this.userRepository = new UserRepository();
   }
 
-  async register({ firstName,lastName, email, password, role }) {
-    const name = firstName + ' ' + lastName;
+  async register({ firstName, lastName, email, password, role }) {
+    const name = `${firstName} ${lastName}`;
 
-      if (!name || !email || !password) {
-    throw new Error('Name, email, and password are required');
-  }
+    if (!firstName || !lastName) throw new Error('Name is required');
+    if (!email) throw new Error('Email is required');
+    if (!password) throw new Error('Password is required');
+
+
     if (!ALLOWED_ROLES.includes(role)) {
-    throw new Error('Invalid role');
-  }
+      throw new Error('Invalid role');
+    }
 
     const existing = await this.userRepository.findByEmail(email);
     if (existing) throw new Error('Email already in use');
 
-    const hashed = await bcrypt.hash(password, 10);
-    const user = await this.userRepository.create({ name, email, password: hashed, role });
+    // Directly save password without hashing
+    const user = await this.userRepository.create({ name, email, password, role });
 
     const token = generateToken(user);
     return { token, user };
@@ -35,11 +36,11 @@ class UserService {
   async login({ email, password }) {
     const user = await this.userRepository.findByEmail(email);
     if (!user) throw new Error('User not found');
-    console.log('Plain password:', password);
-console.log('Stored hash from DB:', user.password);
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) throw new Error('Invalid credentials');
+    // Direct string comparison
+    if (user.password !== password) {
+      throw new Error('Invalid credentials');
+    }
 
     const token = generateToken(user);
     return { token, user };
