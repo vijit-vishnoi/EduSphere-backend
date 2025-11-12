@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import ParticleBackground from './components/ParticleBackground';
 import LoginPage from './components/LoginPage';
@@ -11,8 +11,19 @@ type Page = 'login' | 'signup' | 'forgot-password' | 'student-dashboard' | 'teac
 type UserRole = 'student' | 'teacher' | null;
 
 export default function App() {
+  
   const [currentPage, setCurrentPage] = useState<Page>('login');
   const [userRole, setUserRole] = useState<UserRole>(null);
+  useEffect(() => {
+  const savedUser = localStorage.getItem('user');
+  const savedToken = localStorage.getItem('token');
+  
+  if (savedUser && savedToken) {
+    const user = JSON.parse(savedUser);
+    setUserRole(user.role);
+    setCurrentPage(user.role === 'student' ? 'student-dashboard' : 'teacher-dashboard');
+  }
+}, []);
 
   const handleLogin = (role: 'student' | 'teacher') => {
     setUserRole(role);
@@ -20,6 +31,8 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     setUserRole(null);
     setCurrentPage('login');
   };

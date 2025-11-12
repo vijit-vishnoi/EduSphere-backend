@@ -43,7 +43,13 @@ export default function SignupPage({ onSignup, onNavigateToLogin }: SignupPagePr
     const res = await register(formData);
     console.log("🚀 Signup request sent to backend with:", formData);
 
-    onSignup(res.data.role);
+    const user = res.data.user;
+    const userRole: 'student' | 'teacher' = user.role;
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('token', res.data.token);
+
+onSignup(userRole);
+
   } catch (err: any) {
     console.error(err);
     alert(err.response?.data?.message || 'Signup failed');

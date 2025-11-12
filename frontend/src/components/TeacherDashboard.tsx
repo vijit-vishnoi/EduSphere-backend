@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Sidebar from './Sidebar';
 import TeacherOverview from './teacher/TeacherOverview';
-import TeacherAssignments from './teacher/TeacherAssignments';
+import TeacherClassrooms from './teacher/TeacherClassrooms';
 import TeacherCreateAssignment from './teacher/TeacherCreateAssignment';
 import TeacherStudents from './teacher/TeacherStudents';
 import TeacherComments from './teacher/TeacherComments';
@@ -22,8 +22,8 @@ export default function TeacherDashboard({ onLogout }: TeacherDashboardProps) {
     switch (activeTab) {
       case 'overview':
         return <TeacherOverview />;
-      case 'assignments':
-        return <TeacherAssignments />;
+      case 'classrooms':
+        return <TeacherClassrooms />;
       case 'create':
         return <TeacherCreateAssignment />;
       case 'students':

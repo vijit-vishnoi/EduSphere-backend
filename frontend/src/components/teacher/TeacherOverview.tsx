@@ -122,6 +122,9 @@ export default function TeacherOverview() {
       default: return 'text-edu-blue';
     }
   };
+  const storedUser = localStorage.getItem('user');
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const userName = user ? `${user.name}` : 'Teacher';
 
   return (
     <div className="p-6 h-full overflow-y-auto bg-[var(--edu-bg-primary)]">
@@ -133,7 +136,7 @@ export default function TeacherOverview() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div className="space-y-2">
-            <h1 className="text-3xl text-edu-blue">Welcome back, Professor Martinez!</h1>
+            <h1 className="text-3xl text-edu-blue">Welcome back, Professor {userName}!</h1>
             <p className="text-[var(--edu-text-secondary)]">Here's your teaching dashboard overview</p>
           </div>
           <div className="flex gap-3">

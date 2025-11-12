@@ -42,7 +42,7 @@ export default function Sidebar({
 
   const teacherMenuItems = [
     { id: 'overview', label: 'Overview', icon: BarChart3 },
-    { id: 'assignments', label: 'Assignments', icon: FileText },
+    { id: 'classrooms', label: 'Classrooms', icon: FileText },
     { id: 'create', label: 'Create Assignment', icon: PlusCircle },
     { id: 'students', label: 'Students', icon: Users },
     { id: 'comments', label: 'Comments', icon: MessageSquare },
