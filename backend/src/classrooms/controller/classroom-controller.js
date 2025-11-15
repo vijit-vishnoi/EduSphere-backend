@@ -4,13 +4,15 @@ const { User, Classroom } = require('../../models');
 
 const createClassroom = async (req, res) => {
   try {
-    const { name, subject } = req.body;
+    const { name, description, allowJoinWithCode } = req.body;
     const teacherId = req.user.id;
 
     const classroom = await classroomService.createClassroom({
-      name,
-      subject,
-      teacherId,
+    name,
+    description,
+    allowJoinWithCode,
+    teacherId
+
     });
 
     res.status(201).json({ message: 'Classroom created', classroom });

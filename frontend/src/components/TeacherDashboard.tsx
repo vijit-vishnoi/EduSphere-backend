@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import Sidebar from './Sidebar';
 import TeacherOverview from './teacher/TeacherOverview';
 import TeacherClassrooms from './teacher/TeacherClassrooms';
-import TeacherCreateAssignment from './teacher/TeacherCreateAssignment';
+import TeacherCreateClassroom from './teacher/TeacherCreateClassroom';
 import TeacherStudents from './teacher/TeacherStudents';
 import TeacherComments from './teacher/TeacherComments';
 import TeacherAnalytics from './teacher/TeacherAnalytics';
@@ -23,15 +23,9 @@ export default function TeacherDashboard({ onLogout }: TeacherDashboardProps) {
       case 'overview':
         return <TeacherOverview />;
       case 'classrooms':
-        return <TeacherClassrooms />;
-      case 'create':
-        return <TeacherCreateAssignment />;
-      case 'students':
-        return <TeacherStudents />;
-      case 'comments':
-        return <TeacherComments />;
-      case 'analytics':
-        return <TeacherAnalytics />;
+        return <TeacherClassrooms onTabChange={setActiveTab} />;
+      case 'create-classroom':
+        return <TeacherCreateClassroom onTabChange={setActiveTab} />;
       case 'notifications':
         return <TeacherNotifications />;
       case 'profile':

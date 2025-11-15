@@ -3,24 +3,37 @@ const userService = new UserService();
 
 const register = async (req, res) => {
   try {
-    const {token,user} = await userService.register(req.body);
-    res.status(201).json({ token, user });
+    const { token, user } = await userService.register(req.body);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    });
+
+    res.status(201).json({ user });
   } catch (err) {
-    console.log(err);
-    return res.status(400).json({ success: false, message: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
+
 
 const login = async (req, res) => {
   try {
     const { token, user } = await userService.login(req.body);
-    res.json({ token, user });
-    
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, 
+      sameSite: "lax",
+    });
+
+    res.json({ user });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ message: error.message });
   }
 };
+
 
 
 module.exports = { register, login };

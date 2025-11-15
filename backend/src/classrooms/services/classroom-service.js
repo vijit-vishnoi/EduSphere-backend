@@ -6,15 +6,24 @@ class ClassroomService {
     constructor() {
     this.classroomRepository = new ClassroomRepository();
   }
-  async createClassroom({ name, subject, teacherId }) {
-    const code = (await nanoid())(6);
-    return await this.classroomRepository.create({ name, subject, code, teacherId });
-  }
+  async createClassroom({ name, description, allowJoinWithCode, teacherId }) {
+  const code = (await nanoid())(6);
+  return await this.classroomRepository.create({
+    name,
+    description,
+    allowJoinWithCode,
+    code,
+    teacherId
+  });
+}
+
 
   async joinClassroom({ studentId, code }) {
   const classroom = await this.classroomRepository.findByCode(code);
   if (!classroom) throw new Error('Invalid classroom code');
-
+  if (!classroom.allowJoinWithCode) {
+    throw new Error("Joining with code is disabled for this classroom");
+  }
   const alreadyJoined = await this.classroomRepository.hasStudentJoined(
     classroom.id,
     studentId

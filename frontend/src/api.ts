@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_BASE = 'http://localhost:5000/api/v1'; // backend URL
+axios.defaults.withCredentials = true;
 
 interface RegisterData {
   firstName: string;
@@ -11,7 +12,7 @@ interface RegisterData {
 }
 // Auth
 export const login = (email: string, password: string) =>
-  axios.post(`${API_BASE}/auth/login`, { email, password });
+  axios.post(`${API_BASE}/auth/login`, { email, password }, { withCredentials: true });
 
 export const register = (data:RegisterData) =>
   axios.post(`${API_BASE}/auth/register`, data, { withCredentials: true });

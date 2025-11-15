@@ -31,7 +31,6 @@ export default function LoginPage({ onLogin, onNavigateToSignup, onNavigateToFor
 
       // Save user and token for session persistence
       localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('token', res.data.token);
 
       onLogin(userRole);
     } catch (err: any) {

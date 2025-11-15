@@ -3,15 +3,17 @@ import { motion } from 'motion/react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { Copy ,Globe, Cpu, Sigma, Atom, FlaskRound} from 'lucide-react';
+import { Copy ,Globe, Cpu, Sigma, Atom, FlaskRound,PlusCircle} from 'lucide-react';
 import { Users, FileText, Clock, BookOpen } from 'lucide-react';
+import { getMyClassrooms } from "../../api";
+
 
 // TeacherClassrooms - UI-first component (no backend calls yet)
 // - Top stats (4 cards)
 // - Grid of classroom cards (minimal info per spec)
 // - Empty state when no classrooms exist
 
-export default function TeacherClassrooms() {
+export default function TeacherClassrooms({ onTabChange }: { onTabChange: (tab: string) => void }) {
   // Placeholder stats — replace with real backend values later
 
 const [stats] = useState([
@@ -68,32 +70,7 @@ const EmptyState = () => (
 );
 
   // Example classrooms array — replace with API data later
-  const [classrooms, setClassrooms] = useState([
-  {
-    id: 'cls_1',
-    name: 'Intro to Web Development',
-    subject: 'Web Development',
-    code: 'A1B2C3',
-    createdAt: '2025-01-10',
-    studentCount: 32
-  },
-  {
-    id: 'cls_2',
-    name: 'Database Design 101',
-    subject: 'Computer Science',
-    code: 'X9Y8Z7',
-    createdAt: '2025-02-03',
-    studentCount: 28
-  },
-  {
-    id: 'cls_3',
-    name: 'Algorithms & Data Structures',
-    subject: 'Mathematics',
-    code: 'QW3RT6',
-    createdAt: '2025-03-16',
-    studentCount: 41
-  }
-]);
+  const [classrooms, setClassrooms] = useState<any[]>([]);
 
 
   const storedUser = localStorage.getItem('user');
@@ -120,7 +97,22 @@ const EmptyState = () => (
 
   // If you later fetch from backend, call setClassrooms(fetchedData)
   useEffect(() => {
-    // example: fetchMyClassrooms().then(res => setClassrooms(res.data))
+    const load = async () => {
+      try {
+        setLoading(true);
+
+        const res = await getMyClassrooms();
+        console.log("Fetched classrooms:", res.data);
+
+        setClassrooms(res.data.classrooms || res.data || []);
+      } catch (err) {
+        console.error("Error fetching classrooms:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
   }, []);
 
   return (
@@ -132,7 +124,14 @@ const EmptyState = () => (
             <h1 className="text-3xl text-edu-blue">Your Classrooms</h1>
             <p className="text-[var(--edu-text-secondary)]">Manage the classrooms you created</p>
           </div>
-          <div className="text-sm text-muted-foreground">Professor {userName}</div>
+
+          <Button
+            onClick={() => onTabChange("create-classroom")}
+            className="edu-button-primary"
+          >
+            <PlusCircle className="w-4 h-4 mr-2" />
+            Create Classroom
+          </Button>
         </div>
 
         {/* Stats Cards */}

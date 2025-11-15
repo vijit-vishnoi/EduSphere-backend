@@ -1,9 +1,15 @@
 const { Classroom, ClassroomStudent } = require('../../models');
 
 class ClassroomRepository {
-  async create({ name, subject, code, teacherId }) {
-    return await Classroom.create({ name, subject, code, teacherId });
-  }
+  async create({ name, description, allowJoinWithCode, code, teacherId }) {
+  return await Classroom.create({ 
+    name,
+    description,
+    allowJoinWithCode,
+    code,
+    teacherId
+  });
+}
 
   async findByCode(code) {
     return await Classroom.findOne({ where: { code } });

@@ -43,10 +43,6 @@ export default function Sidebar({
   const teacherMenuItems = [
     { id: 'overview', label: 'Overview', icon: BarChart3 },
     { id: 'classrooms', label: 'Classrooms', icon: FileText },
-    { id: 'create', label: 'Create Assignment', icon: PlusCircle },
-    { id: 'students', label: 'Students', icon: Users },
-    { id: 'comments', label: 'Comments', icon: MessageSquare },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'notifications', label: 'Notifications', icon: Bell, badge: notificationCount },
     { id: 'profile', label: 'Profile', icon: User }
   ];

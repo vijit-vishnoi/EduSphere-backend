@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const { PORT } = require('./config/serverConfig');
 const app = express();
 const cors=require ('cors');
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 app.use(express.json());
 app.use(cors({
