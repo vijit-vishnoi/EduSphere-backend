@@ -14,27 +14,29 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    subjectId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Subjects',
-      key: 'id',
-  },
-}
-
+    points: {
+      type: DataTypes.INTEGER,
+      defaultValue: 100,
+    },
+    allowLateSubmissions: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    requireTextSubmission: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    requireFileUpload: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   });
 
   Assignment.associate = (models) => {
-    Assignment.belongsTo(models.Subject, {
-    foreignKey: 'subjectId', as: 'subject'});
     Assignment.belongsTo(models.User, { foreignKey: 'teacherId', as: 'teacher' });
-    Assignment.belongsTo(models.Classroom, { foreignKey: 'classroomId' });
+    Assignment.belongsTo(models.Classroom, { foreignKey: 'classroomId', as: 'classroom' });
     Assignment.hasMany(models.Submission, { foreignKey: 'assignmentId' });
-    Assignment.hasMany(models.Comment, {
-    foreignKey: 'assignmentId',
-    as: 'comments'
-  });
+    Assignment.hasMany(models.Comment, { foreignKey: 'assignmentId', as: 'comments' });
   };
 
   return Assignment;

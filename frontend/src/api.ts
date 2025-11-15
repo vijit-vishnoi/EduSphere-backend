@@ -21,8 +21,10 @@ export const fetchProfile = () =>
   axios.get(`${API_BASE}/auth/profile`, { withCredentials: true });
 
 // Assignments
-export const fetchAssignments = () =>
-  axios.get(`${API_BASE}/assignments`, { withCredentials: true });
+export const getAssignmentsByClassroom = (classroomId: string) =>
+  axios.get(`${API_BASE}/assignments/${classroomId}`, {
+    withCredentials: true,
+  });
 
 export const createAssignment = (data: any) =>
   axios.post(`${API_BASE}/assignments`, data, { withCredentials: true });
@@ -36,6 +38,10 @@ export const joinClassroom = (classroomId: string) =>
 
 export const getMyClassrooms = () =>
   axios.get(`${API_BASE}/classrooms/my`, { withCredentials: true });
+export const getClassroomById = (classroomId: string) =>
+  axios.get(`${API_BASE}/classrooms/${classroomId}`, {
+    withCredentials: true,
+  });
 
 // Submissions
 export const submitAssignment = (data: any) =>

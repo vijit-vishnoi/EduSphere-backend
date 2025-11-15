@@ -33,6 +33,7 @@ class ClassroomService {
   await this.classroomRepository.addStudentToClassroom(classroom.id, studentId);
   return classroom;
   }
+  
   async leaveClassroom({ classroomId, studentId }) {
   const classroom = await this.classroomRepository.findById(classroomId);
   if (!classroom) throw new Error('Classroom not found');

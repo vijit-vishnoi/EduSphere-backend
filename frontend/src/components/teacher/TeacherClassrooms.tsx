@@ -7,14 +7,14 @@ import { Copy ,Globe, Cpu, Sigma, Atom, FlaskRound,PlusCircle} from 'lucide-reac
 import { Users, FileText, Clock, BookOpen } from 'lucide-react';
 import { getMyClassrooms } from "../../api";
 
+export default function TeacherClassrooms({
+  onTabChange,
+  setSelectedClassroom
+}: {
+  onTabChange: (tab: string) => void;
+  setSelectedClassroom: (id: string) => void;
+}) {
 
-// TeacherClassrooms - UI-first component (no backend calls yet)
-// - Top stats (4 cards)
-// - Grid of classroom cards (minimal info per spec)
-// - Empty state when no classrooms exist
-
-export default function TeacherClassrooms({ onTabChange }: { onTabChange: (tab: string) => void }) {
-  // Placeholder stats — replace with real backend values later
 
 const [stats] = useState([
   { label: 'Total Classrooms', value: 3, icon: BookOpen },
@@ -23,21 +23,7 @@ const [stats] = useState([
   { label: 'Pending Submissions', value: 23, icon: Clock }
 ]);
 const [loading, setLoading] = useState(false);
-
-const subjectColors: Record<string, string> = {
-  "Web Development": "text-edu-blue",
-  "Computer Science": "text-edu-green",
-  "Mathematics": "text-edu-purple",
-  "Physics": "text-edu-amber",
-  "Chemistry": "text-edu-red",
-};
-const subjectIcons: Record<string, any> = {
-  "Web Development": Globe,
-  "Computer Science": Cpu,
-  "Mathematics": Sigma,
-  "Physics": Atom,
-  "Chemistry": FlaskRound,
-};
+const [classrooms, setClassrooms] = useState<any[]>([]);
 
 const LoadingSkeleton = () => (
   <div className="animate-pulse p-6 glass border border-[var(--edu-border)] rounded-2xl">
@@ -69,33 +55,27 @@ const EmptyState = () => (
   </div>
 );
 
-  // Example classrooms array — replace with API data later
-  const [classrooms, setClassrooms] = useState<any[]>([]);
-
-
   const storedUser = localStorage.getItem('user');
   const user = storedUser ? JSON.parse(storedUser) : null;
   const userName = user ? `${user.name}` : 'Teacher';
-
+  
   // copy classroom code helper
   const handleCopy = async (code: string) => {
-    try {
-      await navigator.clipboard.writeText(code);
-      // you can replace this with a toast/snackbar
-      alert(`Classroom code ${code} copied to clipboard`);
-    } catch (e) {
-      console.error('copy failed', e);
-    }
-  };
+  try {
+    await navigator.clipboard.writeText(code);
+    alert(`Classroom code ${code} copied to clipboard`);
+  } catch (e) {
+    console.error('Copy failed', e);
+  }
+};
+
 
   // placeholder open handler — replace with router push / navigation
   const handleOpen = (classroomId: string) => {
-    // TODO: integrate navigation to classroom detail page
-    // e.g. router.push(`/dashboard/classrooms/${classroomId}`)
-    alert(`Open classroom ${classroomId}`);
-  };
-
-  // If you later fetch from backend, call setClassrooms(fetchedData)
+  setSelectedClassroom(classroomId);
+  onTabChange("classroom-details");
+};
+  
   useEffect(() => {
     const load = async () => {
       try {
@@ -114,7 +94,7 @@ const EmptyState = () => (
 
     load();
   }, []);
-
+  
   return (
     <div className="p-6 h-full overflow-y-auto bg-[var(--edu-bg-primary)]">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
@@ -175,8 +155,8 @@ const EmptyState = () => (
               : classrooms.length === 0
               ? <EmptyState />
               : classrooms.map((cls) => {
-                  const Icon = subjectIcons[cls.subject] || BookOpen;
-                  const colorClass = subjectColors[cls.subject] || "text-edu-blue";
+                  const Icon =  BookOpen;
+                  const colorClass = "text-edu-blue";
 
                   return (
                     <motion.div

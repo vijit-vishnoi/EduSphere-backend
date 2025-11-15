@@ -6,13 +6,18 @@ const createAssignment = async (body, teacherId) => {
     description: body.description,
     dueDate: body.dueDate,
     classroomId: body.classroomId,
-    teacherId
+    teacherId,
+    points: body.points,
+    allowLateSubmissions: body.allowLateSubmissions,
+    requireTextSubmission: body.requireTextSubmission,
+    requireFileUpload: body.requireFileUpload,
   };
-  return await assignmentRepo.createAssignment(data);
+
+  return assignmentRepo.createAssignment(data);
 };
 
 const getAssignmentsByClassroom = async (classroomId) => {
-  return await assignmentRepo.getAssignmentsByClassroom(classroomId);
+  return assignmentRepo.getAssignmentsByClassroom(classroomId);
 };
 
 module.exports = {

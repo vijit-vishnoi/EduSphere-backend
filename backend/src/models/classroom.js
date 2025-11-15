@@ -4,13 +4,11 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Classroom extends Model {
     static associate(models) {
-      // ✅ Class teacher (main teacher who owns the class)
       Classroom.belongsTo(models.User, {
         foreignKey: 'teacherId',
         as: 'classTeacher',
       });
 
-      // ✅ Students enrolled in this classroom
       Classroom.belongsToMany(models.User, {
         through: models.ClassroomStudent,
         foreignKey: 'classroomId',
@@ -18,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
         as: 'students',
       });
 
-      // ✅ Assignments in this classroom
       Classroom.hasMany(models.Assignment, {
         foreignKey: 'classroomId',
         as: 'assignments',
@@ -32,14 +29,26 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+
+      description: {
+        type: DataTypes.TEXT,       // ✅ ADD THIS
+        allowNull: true,
+      },
+
+      allowJoinWithCode: {
+        type: DataTypes.BOOLEAN,    // ✅ ADD THIS
+        defaultValue: true,
+      },
+
       code: {
         type: DataTypes.STRING,
         allowNull: true,
         unique: true,
       },
+
       teacherId: {
         type: DataTypes.INTEGER,
-        allowNull: false, // class must have a class teacher
+        allowNull: false,
       },
     },
     {

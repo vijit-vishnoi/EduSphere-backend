@@ -4,7 +4,6 @@ const controller = require('../assignment/controller/assignment-controller');
 const {protect} = require('../middleware/authMiddleware');
 const { authorizeRoles } = require('../middleware/authMiddleware');
 router.post('/', protect, authorizeRoles('teacher'), controller.createAssignment);
-router.get('/', protect, controller.getAssignmentsByClassroom);
-
+router.get('/:classroomId', protect, controller.getAssignmentsByClassroom);
 
 module.exports = router;
