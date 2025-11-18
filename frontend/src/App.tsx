@@ -11,7 +11,7 @@ type Page = 'login' | 'signup' | 'forgot-password' | 'student-dashboard' | 'teac
 type UserRole = 'student' | 'teacher' | null;
 
 export default function App() {
-  
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
   const [currentPage, setCurrentPage] = useState<Page>('login');
   const [userRole, setUserRole] = useState<UserRole>(null);
   useEffect(() => {
@@ -22,7 +22,10 @@ export default function App() {
     const user = JSON.parse(savedUser);
     setUserRole(user.role);
     setCurrentPage(user.role === 'student' ? 'student-dashboard' : 'teacher-dashboard');
+  } else {
+    setCurrentPage('login');
   }
+  setIsAuthChecked(true); // authentication check completed
 }, []);
 
   const handleLogin = (role: 'student' | 'teacher') => {
@@ -36,6 +39,7 @@ export default function App() {
     setUserRole(null);
     setCurrentPage('login');
   };
+  if (!isAuthChecked) return null;
 
   const pageVariants = {
     initial: { opacity: 0, x: 50 },

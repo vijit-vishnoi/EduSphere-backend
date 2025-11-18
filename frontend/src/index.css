@@ -2259,11 +2259,11 @@
 :root {
   --font-size: 14px;
   --background: #fff;
-  --foreground: oklch(.145 0 0);
+  --foreground: oklch(.68 0 0);
   --card: #fff;
-  --card-foreground: oklch(.145 0 0);
+  --card-foreground: oklch(.68 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(.145 0 0);
+  --popover-foreground: oklch(13.437% 0.02923 21.73);
   --primary: #030213;
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(.95 .0058 264.53);
@@ -2288,7 +2288,7 @@
   --chart-5: oklch(.769 .188 70.08);
   --radius: .625rem;
   --sidebar: oklch(.985 0 0);
-  --sidebar-foreground: oklch(.145 0 0);
+  --sidebar-foreground: oklch(.68 0 0);
   --sidebar-primary: #030213;
   --sidebar-primary-foreground: oklch(.985 0 0);
   --sidebar-accent: oklch(.97 0 0);
@@ -2939,4 +2939,7 @@ body {
     opacity: var(--tw-exit-opacity, 1);
     transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));
   }
+}
+.tab-fix > * {
+  margin-right: 2.5rem; /* gap-10 = 40px */
 }

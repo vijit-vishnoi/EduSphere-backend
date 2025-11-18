@@ -6,6 +6,9 @@ import StudentAssignments from './student/StudentAssignments';
 import StudentComments from './student/StudentComments';
 import StudentNotifications from './student/StudentNotifications';
 import StudentProfile from './student/StudentProfile';
+import StudentClassrooms from './student/StudentClassrooms';
+import StudentJoinClassroom from './student/StudentJoinClassroom';
+import StudentClassroomDetails from './student/StudentClassroomDetails';
 
 interface StudentDashboardProps {
   onLogout: () => void;
@@ -13,6 +16,9 @@ interface StudentDashboardProps {
 
 export default function StudentDashboard({ onLogout }: StudentDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
+  const [currentTab, setCurrentTab] = useState("classrooms");
+const [selectedClassroom, setSelectedClassroom] = useState<string>("");
+
   const [notificationCount] = useState(5);
 
   const renderContent = () => {
@@ -21,8 +27,20 @@ export default function StudentDashboard({ onLogout }: StudentDashboardProps) {
         return <StudentOverview />;
       case 'assignments':
         return <StudentAssignments />;
-      case 'comments':
-        return <StudentComments />;
+      case 'classrooms':
+        return <StudentClassrooms
+          onTabChange={setActiveTab}
+          setSelectedClassroom={setSelectedClassroom}
+        />
+      case 'classroom-details':
+      return <StudentClassroomDetails 
+    classroomId={selectedClassroom}
+/>
+
+      case 'join-classroom':
+        return <StudentJoinClassroom
+        onTabChange={setActiveTab}
+        />;
       case 'notifications':
         return <StudentNotifications />;
       case 'profile':

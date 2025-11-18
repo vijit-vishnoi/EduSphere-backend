@@ -121,9 +121,6 @@ export default function TeacherClassroomDetails({
             )}
           </CardContent>
         </Card>
-
-        {/* Assignments Section */}
-        {/* Assignments Section */}
 <Card className="glass-card border-0">
   <CardHeader>
     <CardTitle className="flex items-center gap-2">

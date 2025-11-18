@@ -34,8 +34,7 @@ export default function Sidebar({
 }: SidebarProps) {
   const studentMenuItems = [
     { id: 'overview', label: 'Overview', icon: BookOpen },
-    { id: 'assignments', label: 'Assignments', icon: FileText },
-    { id: 'comments', label: 'Comments', icon: MessageSquare },
+    { id: 'classrooms', label: 'Classrooms', icon: FileText },
     { id: 'notifications', label: 'Notifications', icon: Bell, badge: notificationCount },
     { id: 'profile', label: 'Profile', icon: User }
   ];

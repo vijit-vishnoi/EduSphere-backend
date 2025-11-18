@@ -45,26 +45,42 @@ const getMyClassrooms = async (req, res) => {
     let classrooms = [];
 
     if (role === 'teacher') {
-      classrooms = await Classroom.findAll({
-        where: { teacherId: userId },
-        order: [['createdAt', 'DESC']],
-      });
-    } else if (role === 'student') {
-      const student = await User.findByPk(userId, {
-        include: {
-          model: Classroom,
-          as: 'joinedClassrooms',
-          through: { attributes: [] },
-          include: {
-            model: User,
-            as: 'classTeacher', // ✅ Correct alias
-            attributes: ['id', 'name'],
-          },
+  classrooms = await Classroom.findAll({
+    where: { teacherId: userId },
+    order: [['createdAt', 'DESC']],
+  });
+} else if (role === 'student') {
+  const student = await User.findByPk(userId, {
+    include: {
+      model: Classroom,
+      as: 'joinedClassrooms',
+      through: { attributes: [] },
+      include: [
+        {
+          model: User,
+          as: 'classTeacher',
+          attributes: ['id', 'name']
         },
-      });
-
-      classrooms = student?.joinedClassrooms || [];
+        {
+          model: User,
+          as: 'students',
+          attributes: ['id'],
+          through: { attributes: [] }
+        }
+      ]
     }
+  });
+
+  classrooms = (student?.joinedClassrooms || []).map(cls => ({
+    id: cls.id,
+    name: cls.name,
+    code: cls.code,
+    description: cls.description,
+    teacherName: cls.classTeacher?.name,
+    studentCount: cls.students?.length || 0
+  }));
+}
+
 
     res.status(200).json({ classrooms });
   } catch (error) {

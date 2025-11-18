@@ -27,10 +27,12 @@ export default function LoginPage({ onLogin, onNavigateToSignup, onNavigateToFor
     try {
       const res = await login(email, password);
       const user = res.data.user;
+      const token = res.data.token;
       const userRole: 'student' | 'teacher' = user.role;
 
       // Save user and token for session persistence
       localStorage.setItem('user', JSON.stringify(user));
+       localStorage.setItem('token', token);
 
       onLogin(userRole);
     } catch (err: any) {

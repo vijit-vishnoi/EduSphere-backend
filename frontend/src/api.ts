@@ -33,8 +33,8 @@ export const createAssignment = (data: any) =>
 export const createClassroom = (data: any) =>
   axios.post(`${API_BASE}/classrooms`, data, { withCredentials: true });
 
-export const joinClassroom = (classroomId: string) =>
-  axios.post(`${API_BASE}/classrooms/join`, { classroomId }, { withCredentials: true });
+export const joinClassroom = (code: string) =>
+  axios.post(`${API_BASE}/classrooms/join`, { code }, { withCredentials: true });
 
 export const getMyClassrooms = () =>
   axios.get(`${API_BASE}/classrooms/my`, { withCredentials: true });
